@@ -9,21 +9,7 @@
     'n c';
 }
 
-.header {
-    
-    background-color: cadetblue;
-    grid-area: h;
-}
 
-.header img {
-    width: 50px;
-}
 
-.navbar {
-    background-color: steelblue;
-    grid-area: n;
-}
 
-.content {
-    grid-area: c
-}
+

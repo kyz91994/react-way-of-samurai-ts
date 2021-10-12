@@ -1,0 +1,10 @@
+.navbar {
+    background-color: steelblue;
+    grid-area: n;
+}
+.item{
+    color: black;
+}
+.item.active{
+    color: saddlebrown;
+}

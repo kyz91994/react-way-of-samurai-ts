@@ -1,10 +1,12 @@
- import React from "react";
+import React from "react";
+import c from "./Header.module.css";
 
-function Header(){
-    return(
-        <header className='header'>
-            <img src='https://pbs.twimg.com/profile_images/1431174642199314433/Ag9H38Jw_400x400.jpg'/>
+function Header() {
+    return (
+        <header className={c.header}>
+            <img src='https://w7.pngwing.com/pngs/664/103/png-transparent-pbc-cska-moscow-sport-pfc-cska-moscow-boxing-sport-logo-association.png'/>
         </header>
     )
 }
+
 export default Header
