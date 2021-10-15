@@ -8,6 +8,11 @@
     'h h'
     'n c';
 }
+.app-wrapper-content {
+    background-color: darkgrey;
+    grid-area: c;
+    padding: 20px
+}
 
 
 

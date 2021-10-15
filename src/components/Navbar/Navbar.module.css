@@ -1,6 +1,7 @@
 .navbar {
     background-color: steelblue;
     grid-area: n;
+    padding: 10px;
 }
 .item{
     color: black;
