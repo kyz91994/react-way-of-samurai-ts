@@ -1,9 +1,9 @@
 import React from "react"
 import c from './Post.module.css'
 
-type PostPropsType = {
+export type PostPropsType = {
     message: string,
-    likes_count: number
+    likesCount: number
 }
 function Post(props: PostPropsType) {
     return (
@@ -11,7 +11,7 @@ function Post(props: PostPropsType) {
             <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSye8_F5ZHKn2FQ51IdAmOKH3VaIfKkZLXVEA&usqp=CAU'/>
             <span>{props.message}</span>
             <div>
-                <span>{props.likes_count} </span>
+                <span>{props.likesCount} </span>
                 <span>like</span>
             </div>
         </div>

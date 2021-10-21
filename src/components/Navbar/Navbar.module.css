@@ -3,9 +3,10 @@
     grid-area: n;
     padding: 10px;
 }
-.item{
+.item a{
     color: black;
+    text-decoration: none;
 }
-.item.active{
-    color: saddlebrown;
+.item a.activeLink{
+    color: whitesmoke;
 }
