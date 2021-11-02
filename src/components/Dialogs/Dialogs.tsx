@@ -1,42 +1,38 @@
 import React from "react"
 import c from './Dialogs.module.css';
-import Message, {MessagePropsType} from "./Messages/Messages";
-import DialogItem, {DialogItemPropsType} from "./DialogItem/DialogItem";
-import {StateType} from "../../state";
+import Message from "./Messages/Messages";
+import DialogItem from "./DialogItem/DialogItem";
+import {DialogsPageType, StateType} from "../../redux/state";
 
-// type MessagesDataType = Array<MessagePropsType>
-// type DialogsDataType = Array<DialogItemPropsType>
-//
-// let messagesData: MessagesDataType = [
-//     {id: 1, message: 'Hi'},
-//     {id: 2, message: 'I`s my first project'},
-//     {id: 3, message: 'Kavabanga'},
-// ]
-// let dialogsData: DialogsDataType = [
-//     {id: 1, userName: 'Julia'},
-//     {id: 2, userName: 'Artem'},
-//     {id: 3, userName: 'John'},
-//     {id: 4, userName: 'Evgeniy'},
-//     {id: 5, userName: 'Viktor'},
-// ]
 type DialogsPropsType = {
-    state: StateType
+    state: DialogsPageType
 }
-function Dialogs(props:DialogsPropsType) {
-    let dialogElements = props.state.dialogsData.map(d => <DialogItem userName={d.userName} id={d.id}/>)
-    let messageElements = props.state.messagesData.map(m => <Message message={m.message} id={m.id}/>)
+
+function Dialogs(props: DialogsPropsType) {
+    let dialogElements = props.state.dialogsData.map(d => <DialogItem key={d.id} userName={d.userName} id={d.id} src={d.img}/>)
+    let messageElements = props.state.messagesData.map(m => <Message key={m.id} message={m.message} id={m.id}/>)
+
+    let newMessageElementRef = React.createRef<HTMLTextAreaElement>()
+    let addMessage = () => {
+        let message = newMessageElementRef.current?.value
+        alert(message)
+    }
 
     return (
         <div className={c.dialogs}>
             <div className={c.dialogsItems}>
-                {
-                    dialogElements
-                }
+                {dialogElements}
             </div>
             <div className={c.messagesItem}>
-                {
-                    messageElements
-                }
+                {messageElements}
+                <div>
+                    <textarea ref={newMessageElementRef}></textarea>
+                </div>
+                <div>
+                    <button onClick={addMessage}>Add message</button>
+                </div>
+
+
             </div>
         </div>
     )

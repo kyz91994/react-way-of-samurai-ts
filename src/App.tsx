@@ -8,7 +8,8 @@ import {BrowserRouter, Route} from "react-router-dom";
 import Settings from "./components/Settings/Settings";
 import Music from "./components/Music/Music";
 import News from "./components/News/News";
-import {StateType} from "./state";
+import {StateType} from "./redux/state";
+import { Friends } from './components/Friends/Friends';
 type AppPropsType = {
     state: StateType
 }
@@ -18,13 +19,14 @@ function App(props:AppPropsType) {
         <BrowserRouter>
             <div className='app-wrapper'>
                 <Header/>
-                <Navbar/>
+                <Navbar state={props.state.sideBarPage}/>
                 <div className='app-wrapper-content'>
-                    <Route path='/profile' render={()=><Profile posts={props.state.postsData}/>}/>
-                    <Route path='/dialogs' render={()=><Dialogs state={props.state}/>}/>
+                    <Route path='/profile' render={()=><Profile state={props.state.profilePage}/>}/>
+                    <Route path='/dialogs' render={()=><Dialogs state={props.state.dialogsPage}/>}/>
                     <Route path='/news' render={()=><News/>}/>
                     <Route path='/music' render={()=><Music/>}/>
                     <Route path='/settings' render={()=><Settings/>}/>
+                    <Route path='/friends' render={()=><Friends state={props.state.sideBarPage}/>}/>
                 </div>
 
             </div>
