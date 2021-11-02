@@ -2,10 +2,12 @@ import React from "react"
 import c from './Dialogs.module.css';
 import Message from "./Messages/Messages";
 import DialogItem from "./DialogItem/DialogItem";
-import {DialogsPageType, StateType} from "../../redux/state";
+import {DialogsPageType} from "../../redux/state";
+import {addMessageType} from "../../render";
 
 type DialogsPropsType = {
     state: DialogsPageType
+    addMessage:addMessageType
 }
 
 function Dialogs(props: DialogsPropsType) {
@@ -14,8 +16,10 @@ function Dialogs(props: DialogsPropsType) {
 
     let newMessageElementRef = React.createRef<HTMLTextAreaElement>()
     let addMessage = () => {
-        let message = newMessageElementRef.current?.value
-        alert(message)
+        if(newMessageElementRef.current) {
+            props.addMessage(newMessageElementRef.current.value)
+        }
+
     }
 
     return (

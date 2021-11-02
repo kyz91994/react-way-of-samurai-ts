@@ -1,21 +1,27 @@
-import React, {LegacyRef, RefObject} from "react"
+import React, { RefObject} from "react"
 import c from './Mypost.module.css'
 import Post from "./Post/Post";
-import {PostsDataType} from "../../../redux/state";
+import {addPostType, PostsDataType} from "../../../redux/state";
+
 
 
 
 type MyPostPropsType = {
     posts: PostsDataType
+    addPost:addPostType
 }
 
 function MyPost(props:MyPostPropsType) {
     let posts = props.posts.map(p => <Post message={p.message} likesCount={p.likesCount}/>)
     let newTextElementRef:RefObject<HTMLTextAreaElement> = React.createRef<HTMLTextAreaElement>()
-    let addPost = () => {
-       let text =  newTextElementRef.current?.value
-        alert(text)
-    }
+   const addPost = () => {
+        if(newTextElementRef.current){
+            props.addPost(newTextElementRef.current.value)
+        }
+   }
+
+
+
     return (
         <div className={c.posts}>
             <h3>My posts</h3>
