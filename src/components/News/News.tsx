@@ -2,7 +2,7 @@ import React from "react"
 import c from './News.module.css'
 ;
 
-function News(props:any){
+function News(){
     return(
         <div>
             News

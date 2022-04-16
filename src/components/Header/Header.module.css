@@ -6,3 +6,13 @@
     width: 50px;
     background-color: cadetblue;
 }
+.login_block{
+    float: right;
+    padding: 5px;
+
+}
+.login_block a{
+    color: black;
+    font-weight: bold;
+    font-size: larger;
+}

@@ -1,44 +1,39 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import c from './Navbar.module.css';
-import {SideBarPageType} from "../../redux/state";
-type NavBarPropsTyp = {
-    state:SideBarPageType
+import {SideBarPageType} from "../../redux/store";
+type NavBarPropsType = {
+    sideBarPage: SideBarPageType
 }
 
-function Navbar(props:NavBarPropsTyp) {
-    return (
-        <nav className={c.navbar}>
-            <div className={c.item}>
-                <NavLink to='/profile' activeClassName={c.activeLink}>Profile</NavLink>
-            </div>
-            <div className={c.item}>
-                <NavLink to='/dialogs' activeClassName={c.activeLink}>Messages</NavLink>
-            </div>
-            <div className={c.item}>
-                <NavLink to='/news' activeClassName={c.activeLink}>News</NavLink>
-            </div>
-            <div className={c.item}>
-                <NavLink to='/music' activeClassName={c.activeLink}>Music</NavLink>
-            </div>
-            <div className={c.item}>
-                <NavLink to='/settings' activeClassName={c.activeLink}>Settings</NavLink>
-            </div>
-            <div className={c.item}>
-                <NavLink to='/friends' activeClassName={c.activeLink}>
-                    Friends
+function Navbar(props:NavBarPropsType) {
+            let state = props.sideBarPage
+
+            const sideBar = state.links.map(l => <div key={l.id} className={c.item}>
+                <NavLink to={l.navLink} activeClassName={c.activeLink}>{l.tittle}</NavLink>
+            </div>)
+
+            const friends = state.friends.map(f => <div key={f.id}
+                style={{
+                    display: "inline-block",
+                    margin: '5px',
+                }}>
+                <NavLink to={'/dialogs/' + f.id}>
+                    <img width={'30px'} src={f.img}/>
+                    <div>{f.userName}</div>
+                </NavLink></div>)
+
+            return (
+                <nav className={c.navbar}>
                     <div>
-                        <NavLink to='/dialogs/1'>
-                        <img width={'30px'} src={props.state.friends[0].img}/>
-                        <div>{props.state.friends[0].userName}</div>
-                        </NavLink>
+                        {sideBar}
                     </div>
+                    <div>
+                        {friends}
+                    </div>
+                </nav>
+            )
 
-                </NavLink>
-
-            </div>
-        </nav>
-    )
 }
 
 export default Navbar

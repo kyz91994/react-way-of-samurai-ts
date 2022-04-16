@@ -1,37 +1,61 @@
-import React  from 'react';
+import React from 'react';
 import './App.css';
-import Header from "./components/Header/Header";
-import Navbar from "./components/Navbar/Navbar";
-import Profile from "./components/Profile/Profile";
-import Dialogs from "./components/Dialogs/Dialogs";
+
 import {BrowserRouter, Route} from "react-router-dom";
 import Settings from "./components/Settings/Settings";
 import Music from "./components/Music/Music";
 import News from "./components/News/News";
-import { StateType} from "./redux/state";
-import { Friends } from './components/Friends/Friends';
-type AppPropsType = {
-    state: StateType
-}
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import {FriendsContainer} from "./components/Friends/FriendsContainer";
+import {NavbarContainer} from "./components/Navbar/NavbarContainer";
+import UsersContainer from "./components/Users/UsersContainer";
+import ProfileContainer from "./components/Profile/ProfileContainer";
+import HeaderContainer from "./components/Header/HeaderContainer";
+import Login from "./components/Login/Login";
+import {compose} from "redux";
+import {connect} from "react-redux";
+import {AppStateType} from "./redux/redux-store";
+import {initializeApp} from "./redux/app-reducer";
+import {Preloader} from "./components/common/Preloader";
 
-function App(props:AppPropsType) {
-    return (
-        <BrowserRouter>
-            <div className='app-wrapper'>
-                <Header/>
-                <Navbar state={props.state.sideBarPage}/>
-                <div className='app-wrapper-content'>
-                    <Route path='/profile' render={()=><Profile state={props.state.profilePage} addPost={props.state.addPost}/>}/>
-                    <Route path='/dialogs' render={()=><Dialogs state={props.state.dialogsPage} addMessage={props.state.addMessage}/>}/>
-                    <Route path='/news' render={()=><News/>}/>
-                    <Route path='/music' render={()=><Music/>}/>
-                    <Route path='/settings' render={()=><Settings/>}/>
-                    <Route path='/friends' render={()=><Friends state={props.state.sideBarPage}/>}/>
+type MapDispatchToProps = {
+    initializeApp: ()=> void
+}
+type MapStateToProps = {
+    initialized: boolean
+}
+type AppPropsType = MapStateToProps & MapDispatchToProps
+class App extends React.Component<AppPropsType> {
+    componentDidMount() {
+        this.props.initializeApp()
+    }
+
+    render() {
+        if(!this.props.initialized){
+            return <Preloader/>
+        }
+        return (
+            <BrowserRouter>
+                <div className='app-wrapper'>
+                    <HeaderContainer/>
+                    <NavbarContainer/>
+                    <div className='app-wrapper-content'>
+                        <Route path='/profile/:userId?' render={() => <ProfileContainer/>}/>
+                        <Route path='/dialogs' render={() => <DialogsContainer/>}/>
+                        <Route path='/news' render={() => <News/>}/>
+                        <Route path='/music' render={() => <Music/>}/>
+                        <Route path='/settings' render={() => <Settings/>}/>
+                        <Route path='/friends' render={() => <FriendsContainer/>}/>
+                        <Route path='/users' render={() => <UsersContainer/>}/>
+                        <Route path='/login' render={() => <Login/>}/>
+                    </div>
+
                 </div>
-
-            </div>
-        </BrowserRouter>
-    );
+            </BrowserRouter>
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = (state: AppStateType): MapStateToProps=> ({initialized: state.app.initialized})
+export default compose<React.ComponentType>(connect(mapStateToProps, {initializeApp}))(App) ;
+

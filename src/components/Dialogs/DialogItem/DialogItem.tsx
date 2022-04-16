@@ -13,7 +13,7 @@ function DialogItem(props: DialogItemPropsType) {
         <div className={c.dialog}>
             <NavLink to={'/dialogs/' + props.id}>
                 <div>
-                    <img className={c.avatar} src={props.src}/>
+                    <img alt={'avatar'} className={c.avatar} src={props.src}/>
                     {props.userName}
                 </div>
 

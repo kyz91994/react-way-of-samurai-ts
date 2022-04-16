@@ -1,21 +1,21 @@
-import React from "react"
-import c from './Profile.module.css'
-import MyPost from "./MyPosts/MyPost";
+import React, {ReactNode} from "react"
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import {addPostType, ProfilePageType} from "../../redux/state";
-
-
+import {MyPostContainer} from "./MyPosts/MyPostContainer";
+import {ProfileType} from "../../redux/profile-reducer";
+import {Redirect} from "react-router-dom";
 type ProfilePropsType = {
-    state: ProfilePageType
-    addPost: addPostType
+    profile: ProfileType
+    status: string
+    updateUserStatus:(status:string)=> void
+    isAuth: boolean
 }
 
-
 function Profile(props: ProfilePropsType) {
+    // if(!props.isAuth) return <Redirect to={'/login'}/>
     return (
         <div>
-            <ProfileInfo/>
-            <MyPost posts={props.state.postsData} addPost={props.addPost}/>
+            <ProfileInfo profile={props.profile} status={props.status} updateUserStatus={props.updateUserStatus}/>
+            <MyPostContainer/>
         </div>
     )
 }
