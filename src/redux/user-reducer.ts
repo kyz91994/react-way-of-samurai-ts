@@ -1,5 +1,6 @@
 import {ActionsTypes} from "./store";
 import {userAPI} from "../api/api";
+import {genericMap} from "../utils/map-helper";
 
 export type UserType = {
     id: number
@@ -32,35 +33,37 @@ const initialState: UsersPageType = {
 
 export const userReducer = (state: UsersPageType = initialState, action: ActionsTypes): UsersPageType => {
     switch (action.type) {
-        case 'SET-USERS':
+        case 'SAMURAI-NET/USER/SET-USERS':
             return {
                 ...state, users: action.users
             }
-        case  'UNFOLLOW':
+        case  'SAMURAI-NET/USER/UNFOLLOW':
             return {
-                ...state, users: state.users.map(u => u.id === action.userId ? {...u, followed: false} : u)
+                ...state,
+                users: genericMap(state.users,action.userId, 'id', {followed: false})
             }
 
-        case 'FOLLOW':
+        case 'SAMURAI-NET/USER/FOLLOW':
             return {
-                ...state, users: state.users.map(u => u.id === action.userId ? {...u, followed: true} : u)
+                ...state,
+                users: genericMap(state.users,action.userId, 'id', {followed: true})
             }
-        case 'SET-CURRENT-PAGE': {
+        case 'SAMURAI-NET/USER/SET-CURRENT-PAGE': {
             return {
                 ...state, currentPage: action.page
             }
         }
-        case 'SET-TOTAL-USER-COUNT': {
+        case 'SAMURAI-NET/USER/SET-TOTAL-USER-COUNT': {
             return {
                 ...state, totalUsersCount: action.usersCount
             }
         }
-        case 'TOGGLE-IS-FETCHING': {
+        case 'SAMURAI-NET/USER/TOGGLE-IS-FETCHING': {
             return {
                 ...state, isFetching: action.isFetching
             }
         }
-        case 'TOGGLE-IS-FOLLOWING-PROGRESS': {
+        case 'SAMURAI-NET/USER/TOGGLE-IS-FOLLOWING-PROGRESS': {
             return {
                 ...state,
                 isFollowingInProgress: action.isFetching
@@ -72,14 +75,20 @@ export const userReducer = (state: UsersPageType = initialState, action: Actions
             return state
     }
 }
-export const onFollowButton = (userId: number) => ({type: 'FOLLOW', userId} as const)
-export const onUnFollowButton = (userId: number) => ({type: 'UNFOLLOW', userId} as const)
-export const setUsers = (users: UserType[]) => ({type: 'SET-USERS', users} as const)
-export const setCurrentPage = (page: number) => ({type: 'SET-CURRENT-PAGE', page} as const)
-export const setTotalUsersCount = (usersCount: number) => ({type: 'SET-TOTAL-USER-COUNT', usersCount} as const)
-export const setToggleIsFetching = (isFetching: boolean) => ({type: 'TOGGLE-IS-FETCHING', isFetching} as const)
+export const onFollowButton = (userId: number) => ({type: 'SAMURAI-NET/USER/FOLLOW', userId} as const)
+export const onUnFollowButton = (userId: number) => ({type: 'SAMURAI-NET/USER/UNFOLLOW', userId} as const)
+export const setUsers = (users: UserType[]) => ({type: 'SAMURAI-NET/USER/SET-USERS', users} as const)
+export const setCurrentPage = (page: number) => ({type: 'SAMURAI-NET/USER/SET-CURRENT-PAGE', page} as const)
+export const setTotalUsersCount = (usersCount: number) => ({
+    type: 'SAMURAI-NET/USER/SET-TOTAL-USER-COUNT',
+    usersCount
+} as const)
+export const setToggleIsFetching = (isFetching: boolean) => ({
+    type: 'SAMURAI-NET/USER/TOGGLE-IS-FETCHING',
+    isFetching
+} as const)
 export const toggleFollowingProgress = (isFetching: boolean, userId: number) => ({
-    type: 'TOGGLE-IS-FOLLOWING-PROGRESS',
+    type: 'SAMURAI-NET/USER/TOGGLE-IS-FOLLOWING-PROGRESS',
     isFetching,
     userId
 } as const)
@@ -89,39 +98,30 @@ export type thunkType = (thunk: dispatchType) => void
 export type getUsersThunkCreatorType = (currentPage: number, pageSize: number) => thunkType
 
 export const getUsersThunkCreator: getUsersThunkCreatorType = (currentPage: number, pageSize: number): thunkType => {
-    return (dispatch: dispatchType) => {
+    return async (dispatch: dispatchType) => {
         dispatch(setToggleIsFetching(true))
         dispatch(setCurrentPage((currentPage)))
-        userAPI.getUsers(currentPage, pageSize)
-            .then(data => {
-                dispatch(setToggleIsFetching(false))
-                dispatch(setUsers(data.items))
-                dispatch(setTotalUsersCount(data.totalCount))
-            })
+        let data = await userAPI.getUsers(currentPage, pageSize)
+        dispatch(setToggleIsFetching(false))
+        dispatch(setUsers(data.items))
+        dispatch(setTotalUsersCount(data.totalCount))
     }
 }
-export const unFollowUserThunkCreator = (userId: number): thunkType => {
-    return (dispatch: dispatchType) => {
-        dispatch(toggleFollowingProgress(true, userId))
-        userAPI.unFollowUser(userId)
-            .then(data => {
-                if (data.resultCode === 0) {
-                    dispatch(onUnFollowButton(userId))
-                }
-                dispatch(toggleFollowingProgress(false, userId))
-            })
-    }
+export const unFollowUserThunkCreator = (userId: number): thunkType => async (dispatch: dispatchType) => {
+      followUnfollowUserThunkCreator(dispatch, userId,userAPI.unFollowUser.bind(userAPI),onUnFollowButton )
 }
-export const followUserThunkCreator = (userId: number): thunkType => {
-    return (dispatch: dispatchType) => {
+
+export const followUserThunkCreator = (userId: number): thunkType => async (dispatch: dispatchType) =>{
+      followUnfollowUserThunkCreator(dispatch, userId,userAPI.followUser.bind(userAPI),onFollowButton )
+}
+
+export const followUnfollowUserThunkCreator = async (dispatch: dispatchType,userId: number, apiMethod: (id:number)=>Promise<any>, action:(id: number)=>ActionsTypes  ) => {
         dispatch(toggleFollowingProgress(true, userId))
-        userAPI.followUser(userId)
-            .then(data => {
-                if (data.resultCode === 0) {
-                    dispatch(onFollowButton(userId))
-                }
-                dispatch(toggleFollowingProgress(false, userId))
-            })
-    }
+        let data = await apiMethod(userId)
+
+        if (data.resultCode === 0) {
+            dispatch(action(userId))
+        }
+    dispatch(toggleFollowingProgress(false, userId))
 }
 

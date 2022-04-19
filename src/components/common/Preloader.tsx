@@ -1,8 +1,8 @@
 import React from "react";
 import loader from "../../asserts/images/spinning-circles.svg";
 
-type PreloaderProppsType = {}
-export const Preloader = (props: PreloaderProppsType) => {
+type PreloaderPropsType = {}
+export const Preloader = (props: PreloaderPropsType) => {
     return (
         <div>
             <img alt='loading...' src={loader}/>

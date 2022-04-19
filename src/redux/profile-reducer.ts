@@ -1,5 +1,5 @@
 import {ActionsTypes, PostType, ProfilePageType} from "./store";
-import {profileApi, userAPI} from "../api/api";
+import {profileApi} from "../api/api";
 import {dispatchType, thunkType} from "./user-reducer";
 
 export type ProfileType = {
@@ -55,7 +55,7 @@ const initialState: ProfilePageType = {
 
 export const profileReducer = (state: ProfilePageType = initialState, action: ActionsTypes): ProfilePageType => {
     switch (action.type) {
-        case  'ADD-POST':
+        case  'SAMURAI-NET/PROFILE/ADD-POST':
             const newPost: PostType = {
                 id: 5, message: action.newPostBody, likesCount: 12
             }
@@ -63,13 +63,13 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Ac
                 ...state,
                 postsData: [...state.postsData, newPost],
             }
-        case 'SET-USER-PROFILE':
+        case 'SAMURAI-NET/PROFILE/SET-USER-PROFILE':
             return {
                 ...state,
                 profile: action.profile
 
             }
-        case 'SET-USER-STATUS':
+        case 'SAMURAI-NET/PROFILE/SET-USER-STATUS':
             return {
                 ...state,
                 status: action.status
@@ -79,28 +79,25 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Ac
             return state
     }
 }
-export const addPostActionCreator = (newPostBody:string) => ({type: 'ADD-POST',newPostBody } as const)
-export const setUserProfile = (profile: ProfileType) => ({type: 'SET-USER-PROFILE', profile} as const)
-export const setUserStatus = (status: string) => ({type: 'SET-USER-STATUS', status} as const)
-export const setUserProfileTC = (userId: string): thunkType => {
-    return (dispatch: dispatchType) => {
-        profileApi.getProfile(userId)
-            .then(data => dispatch(setUserProfile(data)))
-    }
+export const addPostActionCreator = (newPostBody: string) => ({
+    type: 'SAMURAI-NET/PROFILE/ADD-POST',
+    newPostBody} as const)
+export const setUserProfile = (profile: ProfileType) => ({
+    type: 'SAMURAI-NET/PROFILE/SET-USER-PROFILE',
+    profile} as const)
+export const setUserStatus = (status: string) => ({type: 'SAMURAI-NET/PROFILE/SET-USER-STATUS', status} as const)
+
+export const setUserProfileTC = (userId: string): thunkType => async (dispatch: dispatchType) => {
+    let data = await profileApi.getProfile(userId)
+    dispatch(setUserProfile(data))
 }
-export const setUserStatusTC = (userId: string): thunkType => {
-    return (dispatch: dispatchType) => {
-        profileApi.getUserStatus(userId)
-            .then(data => dispatch(setUserStatus(data)))
-    }
+export const setUserStatusTC = (userId: string): thunkType => async (dispatch: dispatchType) => {
+    let data = await profileApi.getUserStatus(userId)
+    dispatch(setUserStatus(data))
 }
-export const updateUserStatusTC = (status: string): thunkType => {
-    return (dispatch: dispatchType) => {
-        profileApi.updateUserStatus(status)
-            .then(response =>{
-                if (response.data.resultCode === 0) {
-                    dispatch(setUserStatus(status))
-                }
-            })
+export const updateUserStatusTC = (status: string): thunkType => async (dispatch: dispatchType) => {
+    let response = await profileApi.updateUserStatus(status)
+    if (response.data.resultCode === 0) {
+        dispatch(setUserStatus(status))
     }
 }

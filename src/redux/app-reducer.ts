@@ -10,7 +10,7 @@ const initialState = {
 
 export const appReducer = (state: InitializedType = initialState, action: ActionsTypes): InitializedType => {
     switch (action.type) {
-        case 'INITIALIZE-SUCCESS':
+        case 'SAMURAI-NET/APP/INITIALIZE-SUCCESS':
             return {
                 ...state,
                 initialized: true
@@ -19,7 +19,7 @@ export const appReducer = (state: InitializedType = initialState, action: Action
             return state
     }
 }
-export const setInitialized = () => ({type: 'INITIALIZE-SUCCESS',} as const)
+export const setInitialized = () => ({type: 'SAMURAI-NET/APP/INITIALIZE-SUCCESS',} as const)
 
 
 export const initializeApp = () => (dispatch: Dispatch) => {

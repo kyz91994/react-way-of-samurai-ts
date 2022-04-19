@@ -38,7 +38,6 @@ const  Dialogs = (props: DialogsPropsType) => {
     let onAddMessage = (formData:DialogsFormPropsType) => {
         props.addMessage(formData.newMessageBody)
     }
-    // if(!props.isAuth) return <Redirect to={'/login'}/>
     return (
         <div className={c.dialogs}>
             <div className={c.dialogsItems}>

@@ -23,7 +23,7 @@ const initialState:DialogsPageType = {
 }
 export const dialogReducer = (state:DialogsPageType = initialState, action:ActionsTypes):DialogsPageType => {
     switch (action.type) {
-        case 'ADD-MESSAGE':
+        case 'SAMURAI-NET/DIALOG/ADD-MESSAGE':
             const newMessage: MessageType = {
                 id: 5, message: action.newMessageBody,
             }
@@ -31,4 +31,4 @@ export const dialogReducer = (state:DialogsPageType = initialState, action:Actio
         default: return state
     }
 }
-export const addMessageActionCreator = (newMessageBody:string) => ({type: 'ADD-MESSAGE',newMessageBody} as const)
+export const addMessageActionCreator = (newMessageBody:string) => ({type: 'SAMURAI-NET/DIALOG/ADD-MESSAGE',newMessageBody} as const)

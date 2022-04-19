@@ -1,18 +1,15 @@
 import React from "react";
 import {addMessageActionCreator, dialogReducer} from "./dialog-reducer";
-import {
-    addPostActionCreator,
-    profileReducer, ProfileType,
-    setUserProfile, setUserStatus,
-} from "./profile-reducer";
+import {addPostActionCreator, profileReducer, ProfileType, setUserProfile, setUserStatus,} from "./profile-reducer";
 import {sideBarReducer} from "./sidebar-reducer";
 import {
     onFollowButton,
+    onUnFollowButton,
     setCurrentPage,
+    setToggleIsFetching,
     setTotalUsersCount,
     setUsers,
-    setToggleIsFetching,
-    onUnFollowButton, toggleFollowingProgress
+    toggleFollowingProgress
 } from "./user-reducer";
 import {setAuthUser} from "./auth-reducer";
 import {setInitialized} from "./app-reducer";
@@ -63,10 +60,18 @@ export type addPostType = () => void
 //ACTION TYPES
 export type AddMessageActionType = ReturnType<typeof addMessageActionCreator>
 export type ActionsTypes =
-    ReturnType<typeof addPostActionCreator> | ReturnType<typeof addMessageActionCreator> | ReturnType<typeof onFollowButton>
-    | ReturnType<typeof onUnFollowButton> | ReturnType<typeof setUsers> | ReturnType<typeof setCurrentPage>
-    | ReturnType<typeof setTotalUsersCount> | ReturnType<typeof setToggleIsFetching> | ReturnType<typeof setUserProfile>
-    | ReturnType<typeof setAuthUser> | ReturnType<typeof toggleFollowingProgress> | ReturnType<typeof setUserStatus>
+    ReturnType<typeof addPostActionCreator>
+    | ReturnType<typeof addMessageActionCreator>
+    | ReturnType<typeof onFollowButton>
+    | ReturnType<typeof onUnFollowButton>
+    | ReturnType<typeof setUsers>
+    | ReturnType<typeof setCurrentPage>
+    | ReturnType<typeof setTotalUsersCount>
+    | ReturnType<typeof setToggleIsFetching>
+    | ReturnType<typeof setUserProfile>
+    | ReturnType<typeof setAuthUser>
+    | ReturnType<typeof toggleFollowingProgress>
+    | ReturnType<typeof setUserStatus>
     | ReturnType<typeof setInitialized>
 export type DispatchType = (action: ActionsTypes) => void
 export type StateType = {

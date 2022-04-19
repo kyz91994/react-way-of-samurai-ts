@@ -1,0 +1,7 @@
+span{
+    border: 1px solid black;
+    padding: 1px;
+}
+.selected{
+    font-weight: bold;
+}

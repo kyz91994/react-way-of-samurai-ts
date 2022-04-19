@@ -1,14 +1,14 @@
 import React from "react"
 import c from './Mypost.module.css'
 import Post from "./Post/Post";
-import {ProfilePageType} from "../../../redux/store";
+import {PostsDataType} from "../../../redux/store";
 import {Field, InjectedFormProps, reduxForm} from "redux-form";
 import {maxLengthCreator, required} from "../../../utils/validators/validator";
 import {TextArea} from "../../common/FormsControls/FormsControl";
 
 
 type MyPostPropsType = {
-    profilePage: ProfilePageType
+    posts: PostsDataType
     addPost: (newPostBody: string)=>void
 }
 type FormDataType = {
@@ -30,16 +30,18 @@ const MyPostForm = (props:InjectedFormProps<FormDataType>) => {
 }
 const MyPostReduxForm = reduxForm<FormDataType>({form: 'myPost'})(MyPostForm)
 
-const  MyPost = (props: MyPostPropsType) => {
-    let posts = props.profilePage.postsData.map((p,index) => <Post key={index} message={p.message} likesCount={p.likesCount}/>)
-    const onSubmit = (formData:FormDataType) => {
+const MyPost = React.memo((props: MyPostPropsType) => {
+    console.log('render yo')
+    let posts = props.posts.map((p, index) => <Post key={index} message={p.message}
+                                                                    likesCount={p.likesCount}/>)
+    const onSubmit = (formData: FormDataType) => {
         props.addPost(formData.myPost)
     }
     return (
         <div className={c.posts}>
             <h3>My posts</h3>
             <div>
-                <MyPostReduxForm onSubmit={onSubmit} />
+                <MyPostReduxForm onSubmit={onSubmit}/>
             </div>
             <div className={c.postsBlock}>
                 {
@@ -48,7 +50,9 @@ const  MyPost = (props: MyPostPropsType) => {
             </div>
         </div>
     )
+
 }
+)
 
 export default MyPost
 
