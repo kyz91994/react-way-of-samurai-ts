@@ -34,7 +34,7 @@ export const Paginator = ({totalItemsCount,pageSize, currentPage, onPageChange, 
                 <button disabled={leftBorderOfPortion<=1} onClick={onPrevButtonHandler}>PREV</button>
                 {pages
                     .filter(p=>p>=leftBorderOfPortion && p <=rightBorderOfPortion  )
-                    .map(p => <span key={p} className={(currentPage === p) ? `${styles.selected}` : ''} onClick={() => {
+                    .map(p => <span key={p} className={(currentPage === p) ? `${styles.selected}` : `${styles.numberOfPage}`} onClick={() => {
                    onPageChange(p)
                 }}>{p}</span>)}
                 <button disabled={rightBorderOfPortion >= portionCount} onClick={onNextButtonHandler}>NEXT</button>

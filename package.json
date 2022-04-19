@@ -1,6 +1,7 @@
 {
   "name": "react-way-of-samurai-ts",
   "version": "0.1.0",
+  "homepage": "https://kyz91994.github.io/react-way-of-samurai-ts",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -15,6 +16,7 @@
     "@types/react-router-dom": "^5.3.1",
     "@types/redux-form": "^8.3.3",
     "@types/redux-thunk": "^2.1.0",
+    "gh-pages": "^3.2.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
@@ -30,7 +32,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

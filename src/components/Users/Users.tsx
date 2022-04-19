@@ -1,7 +1,5 @@
 import React from "react";
 import { UserType} from "../../redux/user-reducer";
-import photoUser from "../../asserts/images/pngtree-users-vector-icon-png-image_3725294.jpeg";
-import {NavLink} from "react-router-dom";
 import {Paginator} from "../common/Paginator/Paginator";
 import {User} from "./User";
 

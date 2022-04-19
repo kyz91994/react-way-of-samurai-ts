@@ -1,7 +1,9 @@
-span{
+.numberOfPage{
     border: 1px solid black;
     padding: 1px;
 }
 .selected{
+    border: 1px solid black;
+    padding: 1px;
     font-weight: bold;
 }
